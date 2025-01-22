@@ -2,6 +2,7 @@
 import MainNav from '../components/navigation/MainNav.astro';
 import SocialNav from '../components/navigation/SocialNav.astro';
 import { ClientRouter } from 'astro:transitions';
+import  SpeedInsights  from "@vercel/speed-insights/astro";
 
 const title = "Dziedzinska Art";
 const description = "Oficjalna strona artystki Dziedzińskiej prezentująca portfolio prac artystycznych i modowych.";
@@ -40,5 +41,6 @@ const description = "Oficjalna strona artystki Dziedzińskiej prezentująca port
 <main class="flex-1 overflow-y-auto">
     <slot />
 </main>
+<SpeedInsights />
 </body>
 </html>

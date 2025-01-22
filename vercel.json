@@ -1,0 +1,19 @@
+{
+  "routes": [
+    {
+      "src": "/wp-admin(.*)",
+      "dest": "https://88.198.7.220/wp-admin$1"
+    },
+    {
+      "src": "/wp-content(.*)",
+      "dest": "https://88.198.7.220/wp-content$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/dist/$1",
+      "headers": {
+        "Cache-Control": "public, max-age=3600"
+      }
+    }
+  ]
+}
