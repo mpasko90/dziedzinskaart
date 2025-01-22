@@ -1,0 +1,17 @@
+---
+interface Props {
+    image: {
+        id: string;
+        url: string;
+        title: string;
+    };
+    category: string;
+}
+
+const { image, category } = Astro.props;
+---
+<a href={`/${category}/${image.id}`} class="image-tile">
+    <img src={image.url} alt={image.title} />
+    <h3>{image.title}</h3>
+</a>
+

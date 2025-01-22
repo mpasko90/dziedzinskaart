@@ -1,0 +1,12 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ImageSection from '../../components/gallery/ImageSection.astro';
+import { getAllImages, filterImagesByCategory } from '../../lib/queries/graphql-queries';
+
+const allImages = await getAllImages();
+const fashionImages = filterImagesByCategory(allImages, 'Fashion');
+---
+
+<Layout title="Fashion Gallery">
+    <ImageSection images={fashionImages} category="fashion" />
+</Layout>

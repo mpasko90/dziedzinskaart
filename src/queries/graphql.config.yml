@@ -1,0 +1,2 @@
+schema: https://dziedzinskaart.com/graphql
+documents: 'src/queries/**/*.graphql'

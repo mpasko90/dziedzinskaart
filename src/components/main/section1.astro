@@ -1,0 +1,41 @@
+---
+import Image from 'astro/components/Image.astro';
+import myImage from '../../assets/agata-dziedzinska.jpg';
+---
+
+<div class="flex background-pattern flex-col md:flex-row h-full w-full items-center justify-around gap-4">
+    <div class="flex backdrop-blur-sm text-center container md:max-w-screen-md gap-4 md:justify-center md:items-center h-fit font-header flex-col divide-y divide-solid">
+        <h1 class="text-4xl md:text-6xl motion-scale-in-[0.06] motion-translate-x-in-[-1%] motion-translate-y-in-[-1%]">
+            <span
+                    class="text-secondary">Agata </span>
+            <span
+                    class="text-text">Dziedzińska</span>
+            <br/>
+            <span class="text-3xl">pasjonatka tworzenia</span>
+        </h1>
+
+        <div class="w-full">
+            <p class="mt-2 font-text text-lg md:text-2xl text-center motion-scale-in-[0.06] motion-translate-x-in-[-1%] motion-translate-y-in-[-1%]">
+                Swój świat artystyczny skupiam na malarstwie oraz modzie upcyklingowej
+            </p>
+        </div>
+
+    </div>
+    <Image src={myImage}
+           alt="Dziedzińska Art"
+           class="wavy-circle inline-flex w-full max-w-xl h-fit motion-scale-in-[0.5] motion-rotate-in-[-10deg] motion-blur-in-[10px] motion-delay-[0.75s]/rotate motion-delay-[0.75s]/blur"/>
+</div>
+
+<style>
+    .wavy-circle {
+        border-radius: 52% 48% 80% 20% / 49% 29% 71% 51%;
+    }
+
+    .background-pattern {
+        background-color: #222823;
+        opacity: 0.8;
+        background-image: radial-gradient(#575A5E 2px, transparent 2px), radial-gradient(#575A5E 2px, #222823 2px);
+        background-size: 80px 80px;
+        background-position: 0 0, 40px 40px;
+    }
+</style>

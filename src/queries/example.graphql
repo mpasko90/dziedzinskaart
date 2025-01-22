@@ -1,0 +1,20 @@
+query MyQuery {
+  allGaleriaObrazow {
+    nodes {
+      id
+      title
+      galeriaGrupa {
+        obraz {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        tytul
+        opis
+        kategoria
+        dostepnosc
+      }
+    }
+  }
+}

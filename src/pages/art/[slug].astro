@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllImages, filterImagesByCategory } from '../../lib/queries/graphql-queries';
+
+export async function getStaticPaths() {
+    const allImages = await getAllImages();
+    const artImages = filterImagesByCategory(allImages, 'Art');
+
+    return artImages.map((image) => ({
+        params: { slug: image.title },
+        props: { image },
+    }));
+}
+
+const { image } = Astro.props;
+---
+
+<Layout title={image.galeriaGrupa.tytul}>
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row items-start lg:gap-8 bg-background rounded-lg shadow-lg p-6">
+            <!-- Obraz -->
+            <div class="flex-shrink-0 w-full lg:w-1/2 bg-primary rounded-lg overflow-hidden">
+                <img
+                        src={image.galeriaGrupa.obraz.node.sourceUrl}
+                        alt={image.galeriaGrupa.tytul}
+                        class="w-full h-auto transition-transform duration-300 hover:scale-105"
+                />
+            </div>
+
+            <!-- Opis -->
+            <div class="flex-1 mt-8 lg:mt-0">
+                <!-- Tytuł -->
+                <h1 class="text-4xl font-bold mb-6 text-dark">{image.galeriaGrupa.tytul}</h1>
+
+                <!-- Opis -->
+                <p class="text-lg text-text mb-6 leading-relaxed">
+                    {image.galeriaGrupa.opis}
+                </p>
+
+                <!-- Status -->
+                <div class="flex items-center gap-4">
+                    <span class="text-lg font-medium text-text">Status:</span>
+                    <span
+                            class={`px-4 py-2 rounded-full font-semibold text-sm ${
+                                image.galeriaGrupa.dostepnosc
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                            }`}
+                    >
+                        {image.galeriaGrupa.dostepnosc ? "Dostępny" : "Niedostępny"}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
+

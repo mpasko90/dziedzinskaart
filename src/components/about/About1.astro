@@ -1,0 +1,90 @@
+---
+import Image from 'astro/components/Image.astro';
+import { Icon } from 'astro-icon/components';
+import aboutMeImg from '../../assets/o-mnie-kolaz.jpg';
+---
+
+<section class="py-20 bg-background">
+    <div class="container mx-auto px-4 md:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-bold mb-4 text-primary font-header">Agata Dziedzińska</h1>
+            <p class="text-xl text-secondary font-text">Pasjonatka tworzenia: malarstwo i moda upcyklingowa</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="text-content pr-4 md:pr-8">
+                <!-- Blok z ikoną dla malarstwa -->
+                <div class="flex items-start mb-8 motion-preset-fade-in-200 motion-translate-y-in-25">
+                    <div class="bg-primary p-4 rounded-full text-background">
+                        <Icon name="mdi:brush" class="w-8 h-8" />
+                    </div>
+                    <div class="ml-6">
+                        <h2 class="text-4xl font-bold mb-4 text-primary font-header">
+                            Malarstwo: Moje emocje na płótnie
+                        </h2>
+                        <p class="text-lg text-text leading-relaxed font-text">
+                            W moim malarstwie skupiam się na portretach, w szczególności kobiecych,
+                            starając się uchwycić i wyrazić ich uczucia oraz emocje. Moje obrazy są
+                            pełne detali, a intensywne kolory przyciągają wzrok. Do tworzenia prac
+                            wykorzystuję farby akrylowe na płótnie, a także tekstylia i inne dodatki,
+                            tworząc unikalne kompozycje.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Blok z ikoną dla upcyklingu -->
+                <div class="flex items-start mb-8 motion-preset-fade-in-200 motion-translate-y-in-25">
+                    <div class="bg-primary p-4 rounded-full text-background">
+                        <Icon name="mdi:recycle" class="w-8 h-8" />
+                    </div>
+                    <div class="ml-6">
+                        <h2 class="text-4xl font-bold mb-4 text-primary font-header">
+                            Upcykling: Sztuka kreowania mojego wizerunku
+                        </h2>
+                        <p class="text-lg text-text leading-relaxed font-text">
+                            W odpowiedzi na nadmiar produkcji odzieży, tworzę unikalne projekty z
+                            istniejących już ubrań, dając im drugie życie. Jak mówię: "Art to nie
+                            tylko malarstwo, rzeźba czy muzyka. To także sztuka kreowania wizerunku".
+                            Poprzez upcykling, łączę modę z moją artystyczną wizją.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Blok z ikoną dla mieszania materiałów -->
+                <div class="flex items-start mb-8 motion-preset-fade-in-200 motion-translate-y-in-25">
+                    <div class="bg-primary p-4 rounded-full text-background">
+                        <Icon name="mdi:palette" class="w-8 h-8" />
+                    </div>
+                    <div class="ml-6">
+                        <h2 class="text-4xl font-bold mb-4 text-primary font-header">
+                            Mieszanka materiałów
+                        </h2>
+                        <p class="text-lg text-text leading-relaxed font-text">
+                            Uwielbiam eksperymentować, mieszając różne materiały z farbami.
+                            To połączenie pozwala mi na tworzenie niepowtarzalnego i autorskiego
+                            stylu.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="image-content text-center motion-preset-fade-in-200">
+                <Image
+                        src={aboutMeImg}
+                        alt="Agata Dziedzińska"
+                        class="max-w-full rounded-xl shadow-2xl mb-6"
+                />
+                <p class="italic text-secondary font-text">
+                    Agata Dziedzińska, pasjonatka tworzenia.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .inline-icon {
+        vertical-align: middle;
+        margin-left: 0.2em;
+    }
+</style>

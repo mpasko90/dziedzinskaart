@@ -1,0 +1,149 @@
+---
+import { getAllImages } from '../../lib/queries/graphql-queries';
+import { Icon } from 'astro-icon/components';
+import Image from 'astro/components/Image.astro';
+
+const allImages = await getAllImages();
+---
+<h2 class="text-6xl text-background backdrop-blur-sm font-header drop-shadow">Aktualności:</h2>
+<div class="h-[600px] flex items-center">
+    <div class="relative w-full max-w-7xl mx-auto px-4">
+        <!-- Carousel Container -->
+        <div class="relative overflow-hidden rounded-xl">
+            <div
+                    class="flex transition-transform duration-500 ease-out"
+                    id="carousel"
+            >
+                {allImages.map((image, index) => (
+                        <div
+                                class="min-w-[100%] md:min-w-[50%] lg:min-w-[33.333%] flex-shrink-0 p-2"
+                                key={index.toString()}
+                        >
+                            <div class="bg-white h-[420px] rounded-lg overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-[1.02]">
+                                <div class="h-[320px] overflow-hidden">
+                                    <Image
+                                            src={image.galeriaGrupa.obraz.node.sourceUrl}
+                                            alt={image.galeriaGrupa.tytul}
+                                            class="w-full h-full object-cover"
+                                            width="320"
+                                            height="320"
+                                    />
+                                </div>
+                                <div class="h-[100px] p-4 flex items-center justify-center">
+                                    <h2 class="text-lg font-semibold text-gray-800 text-center line-clamp-2">
+                                        {image.galeriaGrupa.tytul}
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                ))}
+            </div>
+
+            <!-- Navigation Buttons Container -->
+            <div class="flex justify-center items-center space-x-4 mt-6 md:mt-0">
+                <!-- Na małych ekranach przyciski są pod karuzelą, na większych po bokach -->
+                <button
+                        class="md:absolute relative md:left-2 md:top-1/2 md:-translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 z-10"
+                        onclick="prevSlide()"
+                        aria-label="Previous slide"
+                >
+                    <Icon name="heroicons:chevron-left" class="w-5 h-5" />
+                </button>
+
+                <button
+                        class="md:absolute relative md:right-2 md:top-1/2 md:-translate-y-1/2 bg-white/80 hover:bg-white text-primary p-2 rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 z-10"
+                        onclick="nextSlide()"
+                        aria-label="Next slide"
+                >
+                    <Icon name="heroicons:chevron-right" class="w-5 h-5" />
+                </button>
+            </div>
+
+            <!-- Dots Navigation -->
+            <div class="absolute -bottom-16 md:-bottom-8 left-1/2 -translate-x-1/2 flex space-x-2 z-10" id="dots">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const carousel = document.getElementById('carousel');
+    const dotsContainer = document.getElementById('dots');
+
+    function updateDots() {
+        if (!carousel || !dotsContainer) return;
+
+        const totalSlides = carousel.children.length;
+        const slidesPerView = getSlidesPerView();
+        const numberOfDots = Math.ceil(totalSlides / slidesPerView);
+
+        dotsContainer.innerHTML = '';
+
+        for (let i = 0; i < numberOfDots; i++) {
+            const dot = document.createElement('button');
+            dot.classList.add(
+                'w-2', 'h-2', 'rounded-full', 'transition-all', 'duration-300',
+                i === currentIndex ? 'bg-primary' : 'bg-gray-300'
+            );
+            dot.addEventListener('click', () => showSlide(i));
+            dotsContainer.appendChild(dot);
+        }
+    }
+
+    function showSlide(index) {
+        if (!carousel) return;
+        const totalSlides = carousel.children.length;
+        const slidesPerView = getSlidesPerView();
+        const maxIndex = Math.ceil(totalSlides / slidesPerView) - 1;
+
+        if (index > maxIndex) {
+            currentIndex = 0;
+        } else if (index < 0) {
+            currentIndex = maxIndex;
+        } else {
+            currentIndex = index;
+        }
+
+        const offset = (currentIndex * 100) / slidesPerView;
+        carousel.style.transform = `translateX(-${offset}%)`;
+        updateDots();
+    }
+
+    function getSlidesPerView() {
+        const width = window.innerWidth;
+        if (width >= 1024) return 3;
+        if (width >= 768) return 2;
+        return 1;
+    }
+
+    window.nextSlide = function() {
+        showSlide(currentIndex + 1);
+    }
+
+    window.prevSlide = function() {
+        showSlide(currentIndex - 1);
+    }
+
+    // Initialize dots
+    updateDots();
+
+    // Auto-play
+    const autoPlayInterval = setInterval(() => {
+        nextSlide();
+    }, 5000);
+
+    // Handle resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            showSlide(currentIndex);
+        }, 250);
+    });
+
+    // Cleanup
+    document.addEventListener('astro:before-swap', () => {
+        clearInterval(autoPlayInterval);
+    });
+</script>

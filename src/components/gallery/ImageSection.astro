@@ -1,0 +1,28 @@
+---
+import type {ImageNode} from '../../lib/queries/graphql-queries';
+import ImageCard from './ImageCard.astro';
+
+interface Props {
+    images: ImageNode[];
+    category: 'art' | 'fashion' | 'wydarzenia';
+}
+
+const {images, category} = Astro.props;
+const sortedImages = [...images].sort((a, b) => Number(b.galeriaGrupa.dostepnosc) - Number(a.galeriaGrupa.dostepnosc));
+
+---
+
+<section class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedImages.map((image) => (
+                <ImageCard
+                        id={image.id}
+                        title={image.galeriaGrupa.tytul}
+                        imageUrl={image.galeriaGrupa.obraz.node.sourceUrl}
+                        available={image.galeriaGrupa.dostepnosc}
+                        category={category}
+                        slug={image.title}
+                />
+        ))}
+    </div>
+</section>
