@@ -1,4 +1,4 @@
-const WORDPRESS_GRAPHQL_ENDPOINT = "https://dziedzinskaart.com/graphql";
+const WORDPRESS_GRAPHQL_ENDPOINT = "https://admin.dziedzinskaart.com/graphql";
 
 // Typy
 export type ImageNode = {

@@ -3,7 +3,7 @@ import MainNav from '../components/navigation/MainNav.astro';
 import SocialNav from '../components/navigation/SocialNav.astro';
 import { ClientRouter } from 'astro:transitions';
 import  SpeedInsights  from "@vercel/speed-insights/astro";
-
+import '../styles/global.css';
 const title = "Dziedzinska Art";
 const description = "Oficjalna strona artystki Dziedzińskiej prezentująca portfolio prac artystycznych i modowych.";
 ---
@@ -13,10 +13,7 @@ const description = "Oficjalna strona artystki Dziedzińskiej prezentująca port
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+    <link rel="icon" href="/favicon.png" />
     <meta name="description" content={description} />
     <title>{title}</title>
     <ClientRouter fallback="animate" />
