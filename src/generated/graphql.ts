@@ -1,5 +1,5 @@
-/* eslint-disable */
-import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,6 +7,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -10011,6 +10012,8 @@ export enum UserRoleEnum {
   /** User role with specific capabilities */
   Editor = 'EDITOR',
   /** User role with specific capabilities */
+  MenadErGalerii = 'MENAD__ER_GALERII',
+  /** User role with specific capabilities */
   SeoEditor = 'SEO_EDITOR',
   /** User role with specific capabilities */
   SeoManager = 'SEO_MANAGER',
@@ -10631,10 +10634,63 @@ export type WritingSettings = {
   useSmilies: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type MyQueryQueryVariables = Exact<{ [key: string]: never; }>;
+export type Unnamed_1_QueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyQueryQuery = { __typename?: 'RootQuery', allGaleriaObrazow: { __typename?: 'RootQueryToGaleriaObrazowConnection', nodes: Array<{ __typename?: 'GaleriaObrazow', id: string, title: string | null, galeriaGrupa: { __typename?: 'GaleriaGrupa', tytul: string | null, opis: string | null, kategoria: Array<string | null> | null, dostepnosc: boolean | null, obraz: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl: string | null, altText: string | null } } | null } | null }> } | null };
+export type Unnamed_1_Query = { __typename?: 'RootQuery', allGaleriaObrazow: { __typename?: 'RootQueryToGaleriaObrazowConnection', nodes: Array<{ __typename?: 'GaleriaObrazow', id: string, title: string | null, galeriaGrupa: { __typename?: 'GaleriaGrupa', tytul: string | null, opis: string | null, kategoria: Array<string | null> | null, dostepnosc: boolean | null, obraz: { __typename?: 'AcfMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl: string | null, altText: string | null } } | null } | null }> } | null };
 
 
-export const MyQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"allGaleriaObrazow"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"galeriaGrupa"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"obraz"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"node"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"sourceUrl"}},{"kind":"Field","name":{"kind":"Name","value":"altText"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tytul"}},{"kind":"Field","name":{"kind":"Name","value":"opis"}},{"kind":"Field","name":{"kind":"Name","value":"kategoria"}},{"kind":"Field","name":{"kind":"Name","value":"dostepnosc"}}]}}]}}]}}]}}]} as unknown as DocumentNode<MyQueryQuery, MyQueryQueryVariables>;
+export const Document = gql`
+    {
+  allGaleriaObrazow {
+    nodes {
+      id
+      title
+      galeriaGrupa {
+        obraz {
+          node {
+            sourceUrl
+            altText
+          }
+        }
+        tytul
+        opis
+        kategoria
+        dostepnosc
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useQuery__
+ *
+ * To run a query within a React component, call `useQuery` and pass it any options that fit your needs.
+ * When your component renders, `useQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useQuery(baseOptions?: Apollo.QueryHookOptions<Query, QueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<Query, QueryVariables>(Document, options);
+      }
+export function useLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Query, QueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<Query, QueryVariables>(Document, options);
+        }
+export function useSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<Query, QueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<Query, QueryVariables>(Document, options);
+        }
+export type QueryHookResult = ReturnType<typeof useQuery>;
+export type LazyQueryHookResult = ReturnType<typeof useLazyQuery>;
+export type SuspenseQueryHookResult = ReturnType<typeof useSuspenseQuery>;
+export type QueryResult = Apollo.QueryResult<Query, QueryVariables>;

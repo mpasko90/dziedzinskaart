@@ -1,8 +1,8 @@
 ---
 import MainNav from '../components/navigation/MainNav.astro';
 import SocialNav from '../components/navigation/SocialNav.astro';
-import { ClientRouter } from 'astro:transitions';
-import  SpeedInsights  from "@vercel/speed-insights/astro";
+import {ClientRouter} from 'astro:transitions';
+import SpeedInsights from "@vercel/speed-insights/astro";
 import '../styles/global.css';
 const title = "Dziedzinska Art";
 const description = "Oficjalna strona artystki Dziedzińskiej prezentująca portfolio prac artystycznych i modowych.";
@@ -11,33 +11,44 @@ const description = "Oficjalna strona artystki Dziedzińskiej prezentująca port
 <!doctype html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="/favicon.png" />
-    <meta name="description" content={description} />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="/favicon.png"/>
+    <meta name="description" content={description}/>
     <title>{title}</title>
-    <ClientRouter fallback="animate" />
+    <ClientRouter fallback="animate"/>
 </head>
 <body class="h-screen max-w-full flex overflow-hidden">
 <!-- Sidebar -->
 <aside
-        class="bg-primary text-white flex flex-col justify-between h-full w-[5rem] hover:w-[16rem] transition-all duration-300 ease-in-out group"
+        class="bg-primary
+        text-white
+        flex
+        flex-col
+        justify-between
+        h-full
+        w-[5rem]
+        hover:w-[16rem]
+        transition-all
+        duration-300
+        ease-in-out
+        group"
 >
     <!-- Navigation -->
     <div>
-        <MainNav />
+        <MainNav/>
     </div>
 
     <!-- Social Links -->
     <div>
-        <SocialNav />
+        <SocialNav/>
     </div>
 </aside>
 
 <!-- Main Content -->
 <main class="flex-1 overflow-y-auto">
-    <slot />
+    <slot/>
 </main>
-<SpeedInsights />
+<SpeedInsights/>
 </body>
 </html>
