@@ -1,17 +1,50 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getAllImages, filterImagesByCategory } from '../../lib/queries/graphql-queries';
+import apolloClientPkg from '@apollo/client';
+import client from '../../api/graphqlClient';
+const { gql } = apolloClientPkg;
 
+// Zapytanie GraphQL z filtrem kategorii
+const GET_IMAGES_BY_CATEGORY = gql`
+  query GetImagesByCategory($where: RootQueryToGaleriaObrazowConnectionWhereArgs) {
+    allGaleriaObrazow(where: $where) {
+      nodes {
+        id
+        title
+        slug
+        galeriaGrupa {
+          tytul
+          opis
+          dostepnosc
+          kategoria
+          obraz {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+// Generuj ścieżki statyczne dla obrazów w kategorii "Art"
 export async function getStaticPaths() {
-    const allImages = await getAllImages();
-    const artImages = filterImagesByCategory(allImages, 'Art');
+    const { data } = await client.query({
+        query: GET_IMAGES_BY_CATEGORY,
+        variables: { where: { kategoria: ["Art"] } },
+    });
+
+    const artImages = data.allGaleriaObrazow.nodes;
 
     return artImages.map((image) => ({
-        params: { slug: image.title },
+        params: { slug: image.slug },
         props: { image },
     }));
 }
 
+// Pobierz dane dla dynamicznego slug
 const { image } = Astro.props;
 ---
 
@@ -47,11 +80,10 @@ const { image } = Astro.props;
                                     : "bg-red-100 text-red-800"
                             }`}
                     >
-                        {image.galeriaGrupa.dostepnosc ? "Dostępny" : "Niedostępny"}
-                    </span>
+            {image.galeriaGrupa.dostepnosc ? "Dostępny" : "Niedostępny"}
+          </span>
                 </div>
             </div>
         </div>
     </div>
 </Layout>
-

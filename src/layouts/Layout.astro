@@ -19,7 +19,6 @@ const description = "Oficjalna strona artystki Dziedzińskiej prezentująca port
     <ClientRouter fallback="animate"/>
 </head>
 <body class="h-screen max-w-full flex overflow-hidden">
-<!-- Sidebar -->
 <aside
         class="bg-primary
         text-white
@@ -34,18 +33,15 @@ const description = "Oficjalna strona artystki Dziedzińskiej prezentująca port
         ease-in-out
         group"
 >
-    <!-- Navigation -->
     <div>
         <MainNav/>
     </div>
 
-    <!-- Social Links -->
     <div>
         <SocialNav/>
     </div>
 </aside>
 
-<!-- Main Content -->
 <main class="flex-1 overflow-y-auto">
     <slot/>
 </main>

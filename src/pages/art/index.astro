@@ -1,10 +1,42 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ImageSection from '../../components/gallery/ImageSection.astro';
-import { getAllImages, filterImagesByCategory } from '../../lib/queries/graphql-queries';
+import apolloClientPkg from '@apollo/client';
+import client from '../../api/graphqlClient';
+const { gql } = apolloClientPkg;
 
-const allImages = await getAllImages();
-const artImages = filterImagesByCategory(allImages, 'Art');
+// Zapytanie GraphQL z filtrem kategorii
+const GET_IMAGES_BY_CATEGORY = gql`
+  query GetImagesByCategory($kategoria: [String]) {
+    allGaleriaObrazow(where: { kategoria: $kategoria }) {
+      nodes {
+        id
+        title
+        galeriaGrupa {
+          tytul
+          opis
+          dostepnosc
+          kategoria
+          obraz {
+            node {
+              sourceUrl
+              altText
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+// Pobierz tylko obrazy z kategorii "Art"
+const { data } = await client.query({
+    query: GET_IMAGES_BY_CATEGORY,
+    variables: {
+        kategoria: ["Art"]
+    },
+});
+const artImages = data.allGaleriaObrazow.nodes;
 ---
 
 <Layout title="Art Gallery">
