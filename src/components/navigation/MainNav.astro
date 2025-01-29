@@ -1,31 +1,39 @@
 ---
-import { Icon } from 'astro-icon/components';
+import {Icon} from 'astro-icon/components';
 
 const menuItems = [
-    { href: "/", label: "Strona Główna", icon: "mdi:home" },
-    { href: "/o-mnie", label: "O mnie", icon: "mdi:account" },
-    { href: "/art", label: "Art", icon: "mdi:palette" },
-    { href: "/fashion", label: "Fashion", icon: "mdi:shopping" },
-    { href: "/wydarzenia", label: "Wydarzenia", icon: "mdi:calendar" },
-    { href: "/kontakt", label: "Kontakt", icon: "mdi:email" }
+    {href: "/", label: "Strona Główna", icon: "mdi:home"},
+    {href: "/o-mnie", label: "O mnie", icon: "mdi:account"},
+    {href: "/art", label: "Art", icon: "mdi:palette"},
+    {href: "/fashion", label: "Fashion", icon: "mdi:shopping"},
+    {href: "/wydarzenia", label: "Wydarzenia", icon: "mdi:calendar"},
+    {href: "/kontakt", label: "Kontakt", icon: "mdi:email"}
 ];
 
 const currentPath = Astro.url.pathname;
 ---
 
-<nav class="flex flex-col items-center p-4 space-y-4">
-    {menuItems.map(({ href, label, icon }) => (
+<nav class="flex flex-row md:flex-col space-x-4 md:space-x-0 md:space-y-4">
+    {menuItems.map(({href, label, icon}) => (
             <a
                     href={href}
-                    class={`flex items-center w-full px-2 py-2 rounded-lg text-white hover:bg-secondary transition-all duration-300 text-nowrap ${
-                        currentPath === href ? "bg-secondary" : ""
-                    }`}
+                    class=`
+                flex
+                items-center
+                px-2
+                py-2
+                rounded-lg
+                text-white
+                hover:bg-secondary
+                transition-all
+                duration-300
+                text-nowrap
+                ${currentPath === href ? "bg-secondary" : ""}
+                    `
                     aria-label={label}
             >
-                <Icon name={icon} class="w-6 h-6 flex-shrink-0" />
-                <!-- Show text only when sidebar is expanded -->
-                <span class="ml-4 text-sm hidden group-hover:block">{label}</span>
+                <Icon name={icon} class="w-6 h-6 flex-shrink-0"/>
+                <span class="ml-2 md:ml-4 text-sm hidden md:group-hover:block">{label}</span>
             </a>
     ))}
 </nav>
-

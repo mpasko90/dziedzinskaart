@@ -17,6 +17,7 @@ export default {
         background: '#F4F7F5',
         text: '#575A5E',
         dark: '#222823',
+        gold: 'hsl(46, 60%, 38%)',
       },
       transitionProperty: {
         'width': 'width',
