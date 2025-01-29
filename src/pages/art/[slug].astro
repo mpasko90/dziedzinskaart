@@ -1,13 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import apolloClientPkg from '@apollo/client';
-import client from '../../api/graphqlClient';
 const { gql } = apolloClientPkg;
+import client from '../../api/graphqlClient';
 
-// Zapytanie GraphQL z filtrem kategorii
+// Zapytanie GraphQL do pobrania wszystkich obrazów z kategorii "Art"
 const GET_IMAGES_BY_CATEGORY = gql`
-  query GetImagesByCategory($where: RootQueryToGaleriaObrazowConnectionWhereArgs) {
-    allGaleriaObrazow(where: $where) {
+  query GetImagesByCategory {
+    allGaleriaObrazow(where: { kategoria: ["Art"] }) {
+      nodes {
+        id
+        title
+        slug
+      }
+    }
+  }
+`;
+
+// Zapytanie GraphQL do pobrania konkretnego obrazu na podstawie 'slug'
+const GET_IMAGE_BY_SLUG = gql`
+  query GetImageBySlug($slug: String!) {
+    allGaleriaObrazow(where: { slug: $slug }) {
       nodes {
         id
         title
@@ -29,25 +42,62 @@ const GET_IMAGES_BY_CATEGORY = gql`
   }
 `;
 
-// Generuj ścieżki statyczne dla obrazów w kategorii "Art"
+// Funkcja getStaticPaths zwracająca tylko parametry 'slug'
 export async function getStaticPaths() {
-    const { data } = await client.query({
-        query: GET_IMAGES_BY_CATEGORY,
-        variables: { where: { kategoria: ["Art"] } },
-    });
+    try {
+        const { data } = await client.query({
+            query: GET_IMAGES_BY_CATEGORY,
+        });
 
-    const artImages = data.allGaleriaObrazow.nodes;
+        const artImages = data.allGaleriaObrazow.nodes;
 
-    return artImages.map((image) => ({
-        params: { slug: image.slug },
-        props: { image },
-    }));
+        return artImages.map((image) => ({
+            params: { slug: image.slug },
+        }));
+    } catch (error) {
+        console.error(`Błąd podczas pobierania ścieżek: ${error.message}`);
+        return [];
+    }
 }
 
-// Pobierz dane dla dynamicznego slug
-const { image } = Astro.props;
+// Pobranie parametru 'slug' z Astro.params
+const { slug } = Astro.params;
+
+// Pobranie danych dla konkretnego 'slug'
+let image = null;
+let errorMessage = '';
+
+try {
+    const { data, error } = await client.query({
+        query: GET_IMAGE_BY_SLUG,
+        variables: { slug },
+    });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    image = data.allGaleriaObrazow.nodes[0];
+
+    if (!image) {
+        throw new Error(`Nie znaleziono obrazu dla slug: ${slug}`);
+    }
+} catch (error) {
+    console.error(error);
+    errorMessage = error.message;
+}
 ---
 
+{errorMessage ? (
+<Layout title="Błąd">
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold mb-6 text-red-600">Błąd</h1>
+            <p class="text-lg text-gray-700">{errorMessage}</p>
+        </div>
+    </div>
+</Layout>
+    ) : (
 <Layout title={image.galeriaGrupa.tytul}>
     <div class="container mx-auto px-4 py-8">
         <div class="flex flex-col lg:flex-row items-start lg:gap-8 bg-background rounded-lg shadow-lg p-6">
@@ -55,8 +105,9 @@ const { image } = Astro.props;
             <div class="flex-shrink-0 w-full lg:w-1/2 bg-primary rounded-lg overflow-hidden">
                 <img
                         src={image.galeriaGrupa.obraz.node.sourceUrl}
-                        alt={image.galeriaGrupa.tytul}
+                        alt={image.galeriaGrupa.obraz.node.altText || image.galeriaGrupa.tytul}
                         class="w-full h-auto transition-transform duration-300 hover:scale-105"
+                        loading="lazy"
                 />
             </div>
 
@@ -80,10 +131,11 @@ const { image } = Astro.props;
                                     : "bg-red-100 text-red-800"
                             }`}
                     >
-            {image.galeriaGrupa.dostepnosc ? "Dostępny" : "Niedostępny"}
-          </span>
+              {image.galeriaGrupa.dostepnosc ? "Dostępny" : "Niedostępny"}
+            </span>
                 </div>
             </div>
         </div>
     </div>
 </Layout>
+    )}
